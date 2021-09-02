@@ -1,0 +1,39 @@
+/*
+Startup Cortex_M3
+  By Ziad Gamalelden
+SRAM > 0x20000000  
+*/
+.section .vectors /*To put the following words in vector section*/
+
+
+.word 0x20001000 /*Stack top address*/
+.word _reset		/* 1Reset*/
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+.word Vector_handler
+
+
+
+.section .text
+.global _reset
+_reset:
+	bl main
+	b .
+.thumb_func
+Vector_handler:
+	b _reset
