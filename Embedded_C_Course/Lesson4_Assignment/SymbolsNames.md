@@ -1,15 +1,15 @@
 main symbols:\
 00000000 T main
 ____________
-startup symbols:
-         U _E_bss\
-         U _E_DATA\
-         U _E_text\
-         U _S_bss\
-         U _S_DATA\
+startup symbols:\
+       U _E_bss\
+       U _E_DATA\
+       U _E_text\
+       U _S_bss\
+       U _S_DATA\
 00000000 T Default_Handler\
 00000000 W H_Fault_Handler\
-         U main\
+       U main\
 00000000 W NMI_Handler\
 0000000c T Reset_Handler\
 00000000 b Stack_top\
