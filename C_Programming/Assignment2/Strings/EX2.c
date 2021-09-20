@@ -1,24 +1,122 @@
+#include "SDB.h"
+
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-
-#define $fix$ setvbuf(stdout, NULL, _IONBF, 0);setvbuf(stderr, NULL, _IONBF, 0);
-
-
-int main()
+#include <stdlib.h>
+#include <inttypes.h>
+uint8_t AddStudent(SStudent **pStudent)
 {
-	$fix$
-	char string[100];
-	int count = 0, i;
+	SStudent *FinalStudent = *pStudent;
+	SStudent *NewStudent = NULL;
+	char buff[40];
 
-	printf("Enter a string: ");
-	gets(string);
+	/*Checking if this is the first student*/
+	if(FinalStudent == NULL)
+	{
+		NewStudent = (SStudent *)malloc(sizeof(SStudent));
+		*pStudent = NewStudent;
+	}
+	else
+	{
+		/*Iterating to final student*/
+		while(FinalStudent->pNextData != NULL)
+			FinalStudent = FinalStudent->pNextData;
+		NewStudent = (SStudent *)malloc(sizeof(SStudent));
+		FinalStudent->pNextData = NewStudent;
+
+	}
+
+	/*Student information entry*/
+	printf("Enter the ID: ");
+	gets(buff);
+	NewStudent->data.ID = atoi(buff);
+
+	printf("Enter the student full name: ");
+	gets(NewStudent->data.name);
 
 
-	for(i = 0; string[i] != 0; i++)
-		count++;
+	printf("Enter the height: ");
+	gets(buff);
+	NewStudent->data.height = atof(buff);
 
-	printf("Length of the string is : %d", count);
+	NewStudent->pNextData = NULL;
+	return 1;
+}
 
-	return 0;
+uint8_t DeleteStudent(SStudent **pStudent)
+{
+	char buff[40];
+	uint16_t id;
+
+	printf("Enter the student id to be deleted: ");
+	gets(buff);
+	id = atoi(buff);
+
+	/*If list is not empty*/
+	if(!pStudent)
+		return 0;
+
+	SStudent *CurrentStudent = NULL;
+	SStudent *PreviousStudent = NULL;
+
+	CurrentStudent = *pStudent;
+	PreviousStudent = NULL;
+	/*If first student ID matches the required id*/
+	if(CurrentStudent->data.ID == id)
+	{
+		*pStudent = CurrentStudent->pNextData;
+		free(CurrentStudent);
+		return 1;
+	}
+	/*Iterate over students until you find the required id*/
+	while(CurrentStudent->data.ID != id && CurrentStudent != NULL)
+	{
+		PreviousStudent = CurrentStudent;
+		CurrentStudent = CurrentStudent->pNextData;
+
+	}
+	if(CurrentStudent == NULL)
+	{
+		return 0;
+	}
+	PreviousStudent->pNextData = CurrentStudent->pNextData;
+	free(CurrentStudent);
+	return 1;
+
+
+}
+
+uint8_t DeleteAllStudents(SStudent **pStudent)
+{
+	if(*pStudent == NULL)
+		return 0;
+
+	SStudent *CurrentStudent = NULL;
+	SStudent *PreviousStudent = NULL;
+
+	CurrentStudent = *pStudent;
+	PreviousStudent = NULL;
+	while(CurrentStudent != NULL)
+	{
+		PreviousStudent = CurrentStudent;
+		CurrentStudent = CurrentStudent->pNextData;
+		free(PreviousStudent);		
+	}
+	*pStudent = NULL;
+	return 1;
+
+
+}
+void PrintStudents(SStudent **const pStudent)
+{
+	SStudent *CurrentStudent = *pStudent;
+	printf("Database students:\n");
+	while(CurrentStudent != NULL)
+	{
+		printf("\tStudent id: %d\n", CurrentStudent->data.ID);
+		printf("\tStudent name: %s\n", CurrentStudent->data.name);
+		printf("\tStudent height: %0.0f\n", CurrentStudent->data.height);
+		printf("\t*********************\n");
+		CurrentStudent = CurrentStudent->pNextData;
+	}
+
 }
