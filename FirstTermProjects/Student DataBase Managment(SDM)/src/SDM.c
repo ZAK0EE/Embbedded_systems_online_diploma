@@ -213,22 +213,32 @@ void SDM_DeleteStudent(Queue *DataBase, int roll)
 	int found = 0;
 	QueueNode *Current = DataBase->front;
 	QueueNode *Last = NULL;
-	/*In case the roll matches the first student in the queue*/
-	if(((SStudent*)(Current->entry))->roll == roll)
-	{
-		DataBase->front = DataBase->front->next;
-		free(Current);
-		return;
-	}
+
+
 	while(Current != NULL)
 	{
 		if( ((SStudent*)(Current->entry))->roll == roll)
 		{
 			found = 1;
-			/*Delete student*/
-			Last->next = Current->next;
+			/*In case the roll matches the first student in the queue*/
+			if(Current ==  DataBase->front)
+			{
+				DataBase->front = DataBase->front->next;
+			}
+			/*In case the roll matches the last student in the queue*/
+			else if(Current == DataBase->rear)
+			{
+				DataBase->rear = Last;
+				DataBase->rear->next = NULL;
+			}
+			else
+			{
+				Last->next = Current->next;
+			}
+			free(Current->entry);
 			free(Current);
 			DataBase->size--;
+			printf("[INFO]student with roll %d has been deleted\n", roll);
 			break;
 
 		}
