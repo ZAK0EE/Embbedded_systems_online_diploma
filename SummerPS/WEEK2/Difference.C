@@ -32,12 +32,10 @@ int** findDifference(int* nums1, int nums1Size, int* nums2, int nums2Size, int* 
     {
         if(freq1[i] != 0 && freq1[i] != freq2[i])
         {
-            //ans[0] = realloc(ans[0], (++ans0Size) * sizeof(int));
             ans[0][ans0Size++] = i - 1000;
         }
         else if(freq2[i] != 0 && freq2[i] != freq1[i])
         {
-           //ans[1] = realloc(ans[1], (++ans1Size) * sizeof(int));
            ans[1][ans1Size++] = i - 1000; 
         }
     } 
