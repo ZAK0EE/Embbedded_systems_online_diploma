@@ -40,6 +40,10 @@ int** findDifference(int* nums1, int nums1Size, int* nums2, int nums2Size, int* 
         }
     } 
     
+    
+    ans[0] = realloc(ans[0], (ans0Size) * sizeof(int));
+    ans[1] = realloc(ans[1], (ans1Size) * sizeof(int));
+        
     *returnColumnSizes = malloc(sizeof(int) * (*returnSize));
     (*returnColumnSizes)[0] = ans0Size;
     (*returnColumnSizes)[1] = ans1Size;
