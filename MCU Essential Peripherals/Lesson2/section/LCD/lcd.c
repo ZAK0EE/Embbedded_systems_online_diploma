@@ -17,14 +17,16 @@
 
 void LCD_KICK()
 {
+	LCDCR_PORT |= (1 << LCD_EN); // Set EN pin
+	 _delay_us(1);
 	 LCDCR_PORT &= ~(1 << LCD_EN); // Reset EN pin
-	 _delay_ms(50);
-	 LCDCR_PORT |= (1 << LCD_EN); // Set EN pin	
+
 }
 
 void LCD_Clear_Screen(void)
 {
 	LCD_Write_Comand(LCD_CLEAR_SCREEN);
+
 }
 void LCD_Is_Busy(void)
 {	
@@ -33,7 +35,6 @@ void LCD_Is_Busy(void)
 	 
 	 LCDCR_PORT |= (1 << LCD_RW); // RW pin is read
 	 LCDCR_PORT &= ~(1 << LCD_RS); // RS pin is write
-	 
 	 LCD_KICK();
 	 
 	 LCD_DDR = 0xFF;
@@ -96,14 +97,13 @@ void LCD_Write_Comand(unsigned char command)
 	LCD_PORT = (LCD_PORT & 0x0F) | (command & 0xF0);
 	
 	LCDCR_PORT &= ~((1 << LCD_RW) | (1 << LCD_RS));
-	_delay_ms(1);
 	LCD_KICK();
-	
+	 _delay_us(200);
 	LCD_PORT = (LCD_PORT & 0x0F) | (command << 4);
 	
 	LCDCR_PORT &= ~((1 << LCD_RW) | (1 << LCD_RS));
-	_delay_ms(1);
 	LCD_KICK();
+	_delay_ms(2);
 
 #endif
 }
@@ -113,9 +113,9 @@ void LCD_Write_Comand(unsigned char command)
 void LCD_Write_Char(unsigned char data)
 {
 	
-	LCD_Is_Busy();
 
-#ifdef LCD_8BIT_MODE		
+#ifdef LCD_8BIT_MODE
+	LCD_Is_Busy();	
 	LCD_PORT = data;
 	LCDCR_PORT &= ~(1 << LCD_RW);
 	LCDCR_PORT |= (1 << LCD_RS);
@@ -126,21 +126,35 @@ void LCD_Write_Char(unsigned char data)
 
 	LCDCR_PORT &= ~(1 << LCD_RW);
 	LCDCR_PORT |= (1 << LCD_RS);
-	_delay_ms(1);
 	LCD_KICK();
-
 	
 	LCD_PORT = (LCD_PORT & 0x0F) | (data << 4);
 
 	LCDCR_PORT &= ~(1 << LCD_RW);
 	LCDCR_PORT |= (1 << LCD_RS);
-	_delay_ms(1);
 	LCD_KICK();
-	
+	_delay_us(100);
+
 
 #endif
 }
 
+void LCD_Write_CustomChar()
+{
+	LCD_Write_Comand(64);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	LCD_Write_Char(0xff);
+	
+	LCD_Write_Comand(LCD_BEGIN_AT_FIRST_RAW);
+	LCD_Write_Char(0);
+	
+}
 
 
 void LCD_Write_String(char* data)

@@ -60,40 +60,12 @@
 #define LCD_ENTRY_MODE								(0x06)
 #define LCD_EN_4BIT									(0x02)
 
-/** @brief Initialize the LCD
- *  @param None
- *  @return None
- */
+
 void LCD_Init(void);
-
-
-/** @brief Initialize the LCD
- *  @param None
- *  @return None
- */
 void LCD_Write_Comand(unsigned char command);
-
-
-/** @brief Initialize the LCD
- *  @param None
- *  @return None
- */
 void LCD_Write_Char(unsigned char data);
-
-
-/** @brief Initialize the LCD
- *  @param None
- *  @return None
- */
 void LCD_Write_String(char* data);
-
-
-/** @brief Initialize the LCD
- *  @param None
- *  @return None
- */
+void LCD_Write_CustomChar(void);
 void LCD_Is_Busy(void);
-
 void LCD_Clear_Screen(void);
-
 #endif /* LCD_H_ */

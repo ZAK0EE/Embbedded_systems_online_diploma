@@ -19,6 +19,7 @@ int main(void)
 	
 	LCD_Init();
 	KPAD_Init();
+	//LCD_Write_CustomChar();
 	//LCD_Write_String("gOOD BYE");
     while (1) 
     {
