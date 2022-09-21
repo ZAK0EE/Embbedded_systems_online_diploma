@@ -1,0 +1,2 @@
+../HAL/keypad.c:22:6:KPAD_Init	32	static
+../HAL/keypad.c:53:6:KPAD_Get_Char	16	static
