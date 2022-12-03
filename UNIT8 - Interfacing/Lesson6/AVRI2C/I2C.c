@@ -55,7 +55,7 @@ uint8_t I2C_master_start(uint8_t address, uint8_t control)
 	uint8_t status = (TWSR & 0xF8);
 	
 	// If NACK or arbitration lost
-	if(((control == I2C_MASTER_TRANSMITTER) && (status != 0x18)) || ((control == I2C_MASTER_RECEIVER) && (status != 0x40)))
+	if(((control == I2C_MASTER_TRANSMITTER) && (status != I2C_MASTER_ADDRESS_WRITE_ACKED)) || ((control == I2C_MASTER_RECEIVER) && (status != I2C_MASTER_ADDRESS_READ_ACKED)))
 	{
 		return  (TWSR & 0xF8);
 	}

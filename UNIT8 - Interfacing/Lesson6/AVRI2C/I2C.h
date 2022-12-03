@@ -21,6 +21,10 @@
 #define I2C_MASTER_START_TRANSMITTED		(uint8_t)(0x08) // A START condition has been transmitted
 #define I2C_MASTER_RSTART_TRANSMITTED		(uint8_t)(0x10) // A Repeated START condition has been transmitted
 
+#define I2C_MASTER_ADDRESS_WRITE_ACKED		(uint8_t)(0x18) // SLA+W has been transmitted; ACK has been received
+#define I2C_MASTER_ADDRESS_READ_ACKED		(uint8_t)(0x40) // SLA+R has been transmitted; ACK has been received
+
+
 #define I2C_MASTER_DATA_RECEIVED_ACKED		(uint8_t)(0x50)	// Data byte has been received, ACK has been returned
 #define I2C_MASTER_DATA_TRANSMITTED_ACKED	(uint8_t)(0x28) // Data byte has been transmitted, ACK has been received
 
