@@ -19,7 +19,7 @@ ISR(ADC_vect)
 {
     if(myConfig.ISR_ConvCompleted != NULL)
     {
-        //myConfig.ISR_ConvCompleted();
+        myConfig.ISR_ConvCompleted();
     }
 }
 
