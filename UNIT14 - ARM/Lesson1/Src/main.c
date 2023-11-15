@@ -77,6 +77,13 @@ void CPU_SwitchAccess(enum CPUAccessLevel level)
 }
 
 
+
+void SVC_Handler()
+{
+	CPU_SwitchAccess(PRIVILAGED);
+
+}
+
 void interrupt_callback()
 {
 	LCD_Write_String("IRQ, EXTI9 happened --__");
