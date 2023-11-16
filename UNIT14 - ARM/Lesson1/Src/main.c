@@ -36,6 +36,20 @@ extern int _estack;
 
 #define OS_GENERATE_EXCEPTION() __asm volatile("SVC #0x03")
 
+#define CPU_SWITCHACCESS_PRIVILAGED()	__asm volatile(\
+										"mrs r3, CONTROL \n\t"\
+										"lsr r3, r3, #0x1 \n\t"\
+										"lsl r3, r3, #0x1 \n\t"\
+										"msr CONTROL, r3 \n\t"\
+										)
+
+
+#define CPU_SWITCHACCESS_UNPRIVILAGED()	__asm volatile(\
+										"mrs r3, CONTROL \n\t"\
+										"orr r3, r3, #0x1 \n\t"\
+										"msr CONTROL, r3 \n\t"\
+									)
+
 // Main stack
 unsigned int _S_MSP = (unsigned int)&_estack;
 unsigned int _E_MSP;
@@ -95,40 +109,13 @@ int x = 98;
 int y = 99;
 
 
-enum CPUAccessLevel
-{
-	PRIVILAGED,
-	UNPRIVILAGED
-};
-void CPU_SwitchAccess(enum CPUAccessLevel level)
-{
-	switch(level)
-	{
-	case PRIVILAGED:
-		__asm(
-			"mrs r3, CONTROL \n\t"
-			"lsr r3, r3, #0x1 \n\t"
-			"lsl r3, r3, #0x1 \n\t"
-			"msr CONTROL, r3 \n\t"
 
-		);
-		break;
-	case UNPRIVILAGED:
-		__asm(
-			"mrs r3, CONTROL \n\t"
-			"orr r3, r3, #0x1 \n\t"
-			"msr CONTROL, r3 \n\t"
-		);
-		break;
-	}
-}
 
 
 
 void SVC_Handler()
 {
-	CPU_SwitchAccess(PRIVILAGED);
-
+	CPU_SWITCHACCESS_PRIVILAGED();
 }
 
 void interrupt_callback()
@@ -185,7 +172,7 @@ void MainOS()
 			OS_SWITCH_SP_TO_PSP();
 
 			// 3- Switch from privileged to unprivileged
-			CPU_SwitchAccess(UNPRIVILAGED);
+			CPU_SWITCHACCESS_UNPRIVILAGED();
 			// 4- Run the task
 			TaskA(1, 2, 3);
 
@@ -205,8 +192,7 @@ void MainOS()
 			OS_SWITCH_SP_TO_PSP();
 
 			// 3- Switch from privileged to unprivileged
-			CPU_SwitchAccess(UNPRIVILAGED);
-
+			CPU_SWITCHACCESS_UNPRIVILAGED();
 			TaskB(1, 2, 3, 4);
 
 			// 1- Switch from unprivileged to privileged
